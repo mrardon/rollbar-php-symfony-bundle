@@ -64,6 +64,12 @@ class Configuration implements ConfigurationInterface
             }
         }
 
+
+        $rollbarConfigNodeChildren
+            ->scalarNode('person_service')
+                ->defaultValue(null)
+            ->end();
+
         return $treeBuilder;
     }
 }

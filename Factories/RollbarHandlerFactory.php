@@ -30,6 +30,17 @@ class RollbarHandlerFactory
 
         if (!empty($config['person_fn']) && is_callable($config['person_fn'])) {
             $config['person'] = null;
+        } elseif (! empty($config['person_service']) && $container->has($config['person_service'])) {
+            $config['person_fn'] = static function () use ($container, $config) {
+                try {
+                    $service = $container->get($config['person_service']);
+
+                    // call service's __invoke method
+                    return $service();
+                } catch (\Exception $exception) {
+                    // Ignore
+                }
+            };
         } elseif (empty($config['person'])) {
             $config['person_fn'] = static function () use ($container) {
                 try {

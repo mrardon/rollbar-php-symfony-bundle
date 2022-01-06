@@ -32,12 +32,11 @@ class GeneratorTest extends KernelTestCase
      */
     public function testGetContainer(): void
     {
-        $container = $this->getContainer();
         $generator = $this->getGenerator();
 
         $result = $generator->getContainer();
 
-        $this->assertEquals($container, $result);
+        $this->assertInstanceOf(ContainerInterface::class, $result);
     }
 
     /**
@@ -185,7 +184,7 @@ class GeneratorTest extends KernelTestCase
 
         list($message, $payload) = $generator->getExceptionPayload($exception);
 
-        $this->assertContains($msg, $message);
+        $this->assertStringContainsString($msg, $message);
 
         $this->assertArrayHasKey('body', $payload);
         $this->assertArrayHasKey('request', $payload);
@@ -244,7 +243,7 @@ class GeneratorTest extends KernelTestCase
      *
      * @return ContainerInterface
      */
-    private function getContainer(): ContainerInterface
+    protected static function getContainer(): ContainerInterface
     {
         return static::$container ?? static::$kernel->getContainer();
     }

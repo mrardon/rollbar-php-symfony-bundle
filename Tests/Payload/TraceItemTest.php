@@ -28,13 +28,13 @@ class TraceItemTest extends KernelTestCase
 
         $exception = $data['exception'];
         $this->assertEquals(get_class($ex), $exception['class']);
-        $this->assertContains($msg, $exception['message']);
+        $this->assertStringContainsString($msg, $exception['message']);
 
         $this->assertGreaterThan(1, count($data['frames']));
 
         $frame = $data['frames'][0];
-        $this->assertTrue(array_key_exists('filename', $frame));
-        $this->assertTrue(array_key_exists('lineno', $frame));
-        $this->assertTrue(array_key_exists('class_name', $frame));
+        $this->assertArrayHasKey('filename', $frame);
+        $this->assertArrayHasKey('lineno', $frame);
+        $this->assertArrayHasKey('class_name', $frame);
     }
 }

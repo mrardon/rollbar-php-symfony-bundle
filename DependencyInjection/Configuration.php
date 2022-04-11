@@ -11,8 +11,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * Class Configuration
  *
  * @link https://rollbar.com/docs/notifier/rollbar-php/#configuration-reference
- *
- * @package Rollbar\Symfony\RollbarBundle\DependencyInjection
  */
 class Configuration implements ConfigurationInterface
 {
@@ -22,12 +20,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(RollbarExtension::ALIAS);
-
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rollbarConfigNode = $treeBuilder->getRootNode();
-        } else {
-            $rollbarConfigNode = $treeBuilder->root(RollbarExtension::ALIAS);
-        }
+        $rollbarConfigNode = $treeBuilder->getRootNode();
 
         $rollbarConfigNodeChildren = $rollbarConfigNode->children();
 
@@ -35,14 +28,10 @@ class Configuration implements ConfigurationInterface
         $rollbarDefaults = Defaults::get();
 
         foreach ($configOptions as $option) {
-            switch ($option) {
-                case 'branch':
-                    $method = 'gitBranch';
-                    break;
-                default:
-                    $method = $option;
-                    break;
-            }
+            $method = match ($option) {
+                'branch' => 'gitBranch',
+                default => $option,
+            };
 
             try {
                 $default = $rollbarDefaults->fromSnakeCase($method);

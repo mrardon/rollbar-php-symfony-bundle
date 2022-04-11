@@ -1,5 +1,5 @@
 # Rollbar for Symfony
-[![codecov](https://codecov.io/gh/rollbar/rollbar-php-symfony3-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/rollbar/rollbar-php-symfony-bundle)
+[![codecov](https://codecov.io/gh/rollbar/rollbar-php-symfony-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/rollbar/rollbar-php-symfony-bundle)
 [![Build Status](https://travis-ci.org/rollbar/rollbar-php-symfony-bundle.svg?branch=master)](https://travis-ci.org/rollbar/rollbar-php-symfony-bundle)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
@@ -23,7 +23,7 @@ For complete configuration reference, see our [PHP SDK docs](https://docs.rollba
 
 # Release History & Changelog
 
-See our [Releases](https://github.com/rollbar/rollbar-php-symfony3-bundle/releases) page for a list of all releases, including changes.
+See our [Releases](https://github.com/rollbar/rollbar-php-symfony-bundle/releases) page for a list of all releases, including changes.
 
 # Related projects
 
@@ -33,7 +33,7 @@ A Wordpress Plugin is available through Wordpress Admin Panel or through Wordpre
 
 A Laravel-specific package is available for integrating with Laravel: [Rollbar Laravel](https://github.com/rollbar/rollbar-php-laravel)
 
-A CakePHP-specific package is avaliable for integrating with CakePHP 2.x:
+A CakePHP-specific package is available for integrating with CakePHP 2.x:
 [CakeRollbar](https://github.com/tranfuga25s/CakeRollbar)
 
 A Flow-specific package is available for integrating with Neos Flow: [m12/flow-rollbar](https://packagist.org/packages/m12/flow-rollbar)

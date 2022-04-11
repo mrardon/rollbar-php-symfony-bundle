@@ -5,19 +5,12 @@ namespace Rollbar\Symfony\RollbarBundle\Tests\DependencyInjection;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Rollbar\Symfony\RollbarBundle\DependencyInjection\RollbarExtension;
 
-/**
- * Class RollbarExtensionTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests\DependencyInjection
- */
 class RollbarExtensionTest extends AbstractExtensionTestCase
 {
     /**
      * Get container extensions.
      *
      * @link: https://github.com/matthiasnoback/SymfonyDependencyInjectionTest
-     *
-     * @return array
      */
     protected function getContainerExtensions(): array
     {
@@ -43,8 +36,6 @@ class RollbarExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Data provider generatorConfigVars.
-     *
-     * @return array
      */
     public function generatorConfigVars(): array
     {
@@ -54,9 +45,6 @@ class RollbarExtensionTest extends AbstractExtensionTestCase
         ];
     }
 
-    /**
-     * Test alias.
-     */
     public function testAlias(): void
     {
         $extension = new RollbarExtension();

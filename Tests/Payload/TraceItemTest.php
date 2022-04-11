@@ -5,16 +5,8 @@ namespace Rollbar\Symfony\RollbarBundle\Tests\Payload;
 use Rollbar\Symfony\RollbarBundle\Payload\TraceItem;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Class TraceItemTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests\Payload
- */
 class TraceItemTest extends KernelTestCase
 {
-    /**
-     * Test invoke.
-     */
     public function testInvoke(): void
     {
         $msg = 'Text exception - ' . md5(microtime());

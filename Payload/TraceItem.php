@@ -2,21 +2,12 @@
 
 namespace Rollbar\Symfony\RollbarBundle\Payload;
 
-/**
- * Class TraceItem
- *
- * @package Rollbar\Symfony\RollbarBundle\Payload
- */
+use JetBrains\PhpStorm\ArrayShape;
+
 class TraceItem
 {
-    /**
-     * Invoke.
-     *
-     * @param $throwable
-     *
-     * @return array
-     */
-    public function __invoke($throwable)
+    #[ArrayShape(['exception' => "array", 'frames' => "array"])]
+    public function __invoke(\Throwable $throwable): array
     {
         $frames = [];
 

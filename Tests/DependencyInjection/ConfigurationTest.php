@@ -7,16 +7,8 @@ use Rollbar\Defaults;
 use Rollbar\Symfony\RollbarBundle\DependencyInjection\RollbarExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Class ConfigurationTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests\DependencyInjection;
- */
 class ConfigurationTest extends KernelTestCase
 {
-    /**
-     * Test parameters.
-     */
     public function testParameters(): void
     {
         static::bootKernel();
@@ -30,14 +22,10 @@ class ConfigurationTest extends KernelTestCase
         $defaults = [];
         foreach ($configOptions as $option) {
             // Handle the "branch" exception
-            switch ($option) {
-                case "branch":
-                    $method = "gitBranch";
-                    break;
-                default:
-                    $method = $option;
-                    break;
-            }
+            $method = match ($option) {
+                "branch" => "gitBranch",
+                default => $option,
+            };
 
             try {
                 $default = $rollbarDefaults->fromSnakeCase($method);

@@ -5,23 +5,12 @@ namespace Rollbar\Symfony\RollbarBundle\Tests\Payload;
 use Rollbar\Symfony\RollbarBundle\Payload\ErrorItem;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Class ErrorItemTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests
- */
 class ErrorItemTest extends KernelTestCase
 {
     /**
      * Test invoke.
      *
      * @dataProvider generateInvoke
-     *
-     * @param int    $code
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     * @param string $mapped
      */
     public function testInvoke(int $code, string $message, string $file, int $line, string $mapped): void
     {
@@ -33,7 +22,7 @@ class ErrorItemTest extends KernelTestCase
 
         $exception = $data['exception'];
         $this->assertEquals($mapped, $exception['class']);
-        $this->assertContains($message, $exception['message']);
+        $this->assertStringContainsString($message, $exception['message']);
 
         $this->assertCount(1, $data['frames']);
 
@@ -45,7 +34,6 @@ class ErrorItemTest extends KernelTestCase
     /**
      * Data provider for testInvoke.
      *
-     * @return array
      * @throws \Exception
      */
     public function generateInvoke(): array

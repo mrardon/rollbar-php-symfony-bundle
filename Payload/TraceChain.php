@@ -2,21 +2,9 @@
 
 namespace Rollbar\Symfony\RollbarBundle\Payload;
 
-/**
- * Class TraceChain
- *
- * @package Rollbar\Symfony\RollbarBundle\Payload
- */
 class TraceChain
 {
-    /**
-     * Invoke.
-     *
-     * @param $throwable
-     *
-     * @return array
-     */
-    public function __invoke($throwable)
+    public function __invoke(\Throwable $throwable): array
     {
         $chain = [];
         $item  = new TraceItem();

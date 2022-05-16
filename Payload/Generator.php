@@ -29,7 +29,6 @@ class Generator
             'body'             => [],
             'framework'        => Kernel::VERSION,
             'server'           => $this->getServerInfo(),
-            'language_version' => PHP_VERSION,
             'request'          => $this->getRequestInfo(),
             'environment'      => $this->getKernel()->getEnvironment(),
         ];
@@ -62,7 +61,6 @@ class Generator
             'request'          => $this->getRequestInfo(),
             'environment'      => $this->getKernel()->getEnvironment(),
             'framework'        => Kernel::VERSION,
-            'language_version' => PHP_VERSION,
             'server'           => $this->getServerInfo(),
         ];
 

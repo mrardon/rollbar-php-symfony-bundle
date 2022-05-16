@@ -136,7 +136,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertArrayHasKey('request', $payload);
         $this->assertArrayHasKey('environment', $payload);
         $this->assertArrayHasKey('framework', $payload);
-        $this->assertArrayHasKey('language_version', $payload);
         $this->assertArrayHasKey('server', $payload);
 
         $body = ['trace' => $item($code, $msg, $file, $line)];
@@ -145,7 +144,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertEquals($requestInfo, $payload['request']);
         $this->assertEquals(static::$kernel->getEnvironment(), $payload['environment']);
         $this->assertEquals(Kernel::VERSION, $payload['framework']);
-        $this->assertEquals(PHP_VERSION, $payload['language_version']);
         $this->assertEquals($serverInfo, $payload['server']);
     }
 
@@ -176,7 +174,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertArrayHasKey('request', $payload);
         $this->assertArrayHasKey('environment', $payload);
         $this->assertArrayHasKey('framework', $payload);
-        $this->assertArrayHasKey('language_version', $payload);
         $this->assertArrayHasKey('server', $payload);
 
         $body = ['trace_chain' => $chain($exception)];
@@ -185,7 +182,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertEquals($requestInfo, $payload['request']);
         $this->assertEquals(static::$kernel->getEnvironment(), $payload['environment']);
         $this->assertEquals(Kernel::VERSION, $payload['framework']);
-        $this->assertEquals(PHP_VERSION, $payload['language_version']);
         $this->assertEquals($serverInfo, $payload['server']);
     }
 

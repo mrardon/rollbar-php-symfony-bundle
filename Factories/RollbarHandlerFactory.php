@@ -30,7 +30,7 @@ class RollbarHandlerFactory
                         $serializer = $container->get('serializer');
                         return \json_decode($serializer->serialize($user, 'json'), true, 512, JSON_THROW_ON_ERROR);
                     }
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     // Ignore
                 }
             };

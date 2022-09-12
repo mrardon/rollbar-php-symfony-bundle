@@ -19,7 +19,7 @@ class AppKernel extends Kernel
         ];
     }
 
-    public function getRootDir(): string
+    public function getProjectDir(): string
     {
         return __DIR__;
     }
@@ -29,7 +29,7 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getProjectDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     public function getCacheDir(): string

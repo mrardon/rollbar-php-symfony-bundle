@@ -19,7 +19,7 @@ class Generator
     /**
      * Get payload a log record.
      */
-    public function getExceptionPayload(\Exception $exception): array
+    public function getExceptionPayload(\Throwable $exception): array
     {
         /**
          * Build payload

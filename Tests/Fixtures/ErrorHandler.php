@@ -5,28 +5,15 @@ namespace Tests\Fixtures;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
-/**
- * Class ErrorHandler
- *
- * @package Tests\Fixtures
- */
 class ErrorHandler extends AbstractProcessingHandler
 {
-    /**
-     * @var ErrorHandler
-     */
-    protected static $instance;
+    protected static ErrorHandler $instance;
 
     /**
      * @var callable
      */
     protected $assert;
 
-    /**
-     * Get instance.
-     *
-     * @return ErrorHandler
-     */
     public static function getInstance(): ErrorHandler
     {
         if (empty(static::$instance)) {
@@ -36,22 +23,13 @@ class ErrorHandler extends AbstractProcessingHandler
         return static::$instance;
     }
 
-    /**
-     * Set assert.
-     *
-     * @param callable $assert
-     */
-    public function setAssert($assert = null): void
+    public function setAssert(callable $assert = null): void
     {
         $this->assert = $assert;
     }
 
     /**
      * Writes the record down to the log of the implementing handler
-     *
-     * @param array $record
-     *
-     * @return void
      */
     protected function write(array $record): void
     {

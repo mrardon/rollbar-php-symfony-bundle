@@ -2,46 +2,24 @@
 
 namespace Rollbar\Symfony\RollbarBundle\Payload;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
-/**
- * Class Generator
- *
- * @package Rollbar\Symfony\RollbarBundle\Payload
- */
 class Generator
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ?Kernel $kernel;
 
-    /**
-     * @var Kernel
-     */
-    protected $kernel;
-
-    /**
-     * Generator constructor.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct(protected ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->kernel    = $container->get('kernel');
+        $this->kernel = $container->get('kernel');
     }
 
     /**
      * Get payload a log record.
-     *
-     * @param \Exception $exception
-     *
-     * @return array
      */
-    public function getExceptionPayload($exception): array
+    public function getExceptionPayload(\Throwable $exception): array
     {
         /**
          * Build payload
@@ -51,18 +29,9 @@ class Generator
             'body'             => [],
             'framework'        => Kernel::VERSION,
             'server'           => $this->getServerInfo(),
-            'language_version' => phpversion(),
             'request'          => $this->getRequestInfo(),
             'environment'      => $this->getKernel()->getEnvironment(),
         ];
-
-        // @link http://php.net/manual/en/reserved.constants.php
-        // @link http://php.net/manual/en/language.errors.php7.php
-        if (!($exception instanceof \Exception) || PHP_MAJOR_VERSION > 7 && !($exception instanceof \Throwable)) {
-            $payload['body'] = $this->buildGeneratorError($exception, __FILE__, __LINE__);
-
-            return ['Undefined error', $payload];
-        }
 
         // handle exception
         $chain = new TraceChain();
@@ -75,33 +44,15 @@ class Generator
         return [$message, $payload];
     }
 
-    /**
-     * Build generator error.
-     *
-     * @param object $object
-     * @param string $file
-     * @param int    $line
-     *
-     * @return array
-     */
-    protected function buildGeneratorError($object, $file, $line): array
+    #[ArrayShape(['trace' => "array"])]
+    protected function buildGeneratorError(object $object, string $file, int $line): array
     {
         $item = new ErrorItem();
 
         return ['trace' => $item(0, serialize($object), $file, $line)];
     }
 
-    /**
-     * Get error payload.
-     *
-     * @param int    $code
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
-     * @return array
-     */
-    public function getErrorPayload($code, $message, $file, $line): array
+    public function getErrorPayload(int $code, string $message, string $file, int $line): array
     {
         $item = new ErrorItem();
 
@@ -110,22 +61,24 @@ class Generator
             'request'          => $this->getRequestInfo(),
             'environment'      => $this->getKernel()->getEnvironment(),
             'framework'        => Kernel::VERSION,
-            'language_version' => PHP_VERSION,
             'server'           => $this->getServerInfo(),
         ];
 
         return [$message, $payload];
     }
 
-    /**
-     * Get request info.
-     *
-     * @return array
-     */
+    #[ArrayShape(['url' => "string",
+        'method' => "string",
+        'headers' => "mixed",
+        'query_string' => "null|string",
+        'body' => "mixed",
+        'user_ip' => "null|string"])]
     protected function getRequestInfo(): array
     {
+        /** @var $request Request */
         $request = $this->getContainer()->get('request_stack')->getCurrentRequest();
-        if (empty($request)) {
+
+        if ($request === null) {
             $request = new Request();
         }
 
@@ -139,11 +92,11 @@ class Generator
         ];
     }
 
-    /**
-     * Get server info.
-     *
-     * @return array
-     */
+    #[ArrayShape(['host' => "false|string",
+        'root' => "string",
+        'user' => "string",
+        'file' => "mixed|null",
+        'argv' => "string"])]
     protected function getServerInfo(): array
     {
         $args   = $_SERVER['argv'] ?? [];
@@ -151,28 +104,18 @@ class Generator
 
         return [
             'host' => gethostname(),
-            'root' => $kernel->getRootDir(),
+            'root' => $kernel->getProjectDir(),
             'user' => get_current_user(),
             'file' => array_shift($args),
             'argv' => implode(' ', $args),
         ];
     }
 
-    /**
-     * Get container.
-     *
-     * @return ContainerInterface
-     */
     public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
 
-    /**
-     * Get kernel.
-     *
-     * @return Kernel
-     */
     public function getKernel(): Kernel
     {
         return $this->kernel;

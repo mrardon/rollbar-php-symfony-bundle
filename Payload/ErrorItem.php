@@ -2,20 +2,15 @@
 
 namespace Rollbar\Symfony\RollbarBundle\Payload;
 
-/**
- * Class ErrorItem
- *
- * @package Rollbar\Symfony\RollbarBundle\Payload
- */
+use JetBrains\PhpStorm\ArrayShape;
+
 class ErrorItem
 {
     /**
      * List of map for human readable constants
      * @link http://php.net/manual/en/errorfunc.constants.php
-     *
-     * @var array
      */
-    public static $map = [
+    public static array $map = [
         E_ERROR             => 'E_ERROR',
         E_WARNING           => 'E_WARNING',
         E_PARSE             => 'E_PARSE',
@@ -33,17 +28,8 @@ class ErrorItem
         E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
     ];
 
-    /**
-     * Invoke.
-     *
-     * @param int    $code
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
-     * @return array
-     */
-    public function __invoke($code, $message, $file, $line)
+    #[ArrayShape(['exception' => "array", 'frames' => "array[]"])]
+    public function __invoke(int $code, string $message, string $file, int $line): array
     {
         return [
             'exception' => [
@@ -69,12 +55,8 @@ class ErrorItem
 
     /**
      * Map error code to human format
-     *
-     * @param mixed $code
-     *
-     * @return string
      */
-    protected function mapError($code): string
+    protected function mapError(mixed $code): string
     {
         $code = (int) $code;
 

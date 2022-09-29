@@ -7,14 +7,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * Class RollbarExtension
- *
- * @package Rollbar\Symfony\RollbarBundle\DependencyInjection
- */
 class RollbarExtension extends Extension
 {
-    const ALIAS = 'rollbar';
+    public const ALIAS = 'rollbar';
 
     /**
      * {@inheritdoc}

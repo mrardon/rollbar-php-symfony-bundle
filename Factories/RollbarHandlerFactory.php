@@ -3,23 +3,13 @@
 namespace Rollbar\Symfony\RollbarBundle\Factories;
 
 use Psr\Log\LogLevel;
-use Rollbar\Monolog\Handler\RollbarHandler;
+use Monolog\Handler\RollbarHandler;
 use Rollbar\Rollbar;
 use Rollbar\Symfony\RollbarBundle\DependencyInjection\RollbarExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class RollbarHandlerFactory
- *
- * @package Rollbar\Symfony\RollbarBundle\Factories
- */
 class RollbarHandlerFactory
 {
-    /**
-     * RollbarHandlerFactory constructor.
-     *
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $config = $container->getParameter(RollbarExtension::ALIAS . '.config');
@@ -49,9 +39,9 @@ class RollbarHandlerFactory
                     if ($token) {
                         $user = $token->getUser();
                         $serializer = $container->get('serializer');
-                        return \json_decode($serializer->serialize($user, 'json'), true);
+                        return \json_decode($serializer->serialize($user, 'json'), true, 512, JSON_THROW_ON_ERROR);
                     }
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     // Ignore
                 }
             };
@@ -60,11 +50,6 @@ class RollbarHandlerFactory
         Rollbar::init($config, false, false, false);
     }
 
-    /**
-     * Create RollbarHandler
-     *
-     * @return RollbarHandler
-     */
     public function createRollbarHandler(): RollbarHandler
     {
         return new RollbarHandler(Rollbar::logger(), LogLevel::ERROR);

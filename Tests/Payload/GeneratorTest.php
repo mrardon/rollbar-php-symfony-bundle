@@ -10,11 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
-/**
- * Class GeneratorTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests
- */
 class GeneratorTest extends KernelTestCase
 {
     /**
@@ -27,22 +22,15 @@ class GeneratorTest extends KernelTestCase
         static::bootKernel();
     }
 
-    /**
-     * Test getContainer.
-     */
     public function testGetContainer(): void
     {
-        $container = $this->getContainer();
         $generator = $this->getGenerator();
 
         $result = $generator->getContainer();
 
-        $this->assertEquals($container, $result);
+        $this->assertInstanceOf(ContainerInterface::class, $result);
     }
 
-    /**
-     * Test getKernel.
-     */
     public function testGetKernel(): void
     {
         $generator = $this->getGenerator();
@@ -55,10 +43,6 @@ class GeneratorTest extends KernelTestCase
     /**
      * Get class method.
      *
-     * @param string $class
-     * @param string $method
-     *
-     * @return \ReflectionMethod
      * @throws \ReflectionException
      */
     protected static function getClassMethod(string $class, string $method): \ReflectionMethod
@@ -72,6 +56,7 @@ class GeneratorTest extends KernelTestCase
 
     /**
      * Test getServerInfo.
+     * @throws \ReflectionException
      */
     public function testGetServerInfo(): void
     {
@@ -87,7 +72,7 @@ class GeneratorTest extends KernelTestCase
         $this->assertArrayHasKey('argv', $data);
 
         $this->assertEquals($data['host'], gethostname());
-        $this->assertEquals($data['root'], static::$kernel->getRootDir());
+        $this->assertEquals($data['root'], static::$kernel->getProjectDir());
         $this->assertEquals($data['user'], get_current_user());
     }
 
@@ -97,7 +82,7 @@ class GeneratorTest extends KernelTestCase
      */
     public function testGetRequestInfo(): void
     {
-        $container = $this->getContainer();
+        $container = self::getContainer();
         $generator = $this->getGenerator();
 
         $request = $container->get('request_stack')->getCurrentRequest();
@@ -151,7 +136,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertArrayHasKey('request', $payload);
         $this->assertArrayHasKey('environment', $payload);
         $this->assertArrayHasKey('framework', $payload);
-        $this->assertArrayHasKey('language_version', $payload);
         $this->assertArrayHasKey('server', $payload);
 
         $body = ['trace' => $item($code, $msg, $file, $line)];
@@ -160,7 +144,6 @@ class GeneratorTest extends KernelTestCase
         $this->assertEquals($requestInfo, $payload['request']);
         $this->assertEquals(static::$kernel->getEnvironment(), $payload['environment']);
         $this->assertEquals(Kernel::VERSION, $payload['framework']);
-        $this->assertEquals(PHP_VERSION, $payload['language_version']);
         $this->assertEquals($serverInfo, $payload['server']);
     }
 
@@ -183,15 +166,14 @@ class GeneratorTest extends KernelTestCase
         $exception = new \Exception($msg, $code);
         $chain     = new TraceChain();
 
-        list($message, $payload) = $generator->getExceptionPayload($exception);
+        [$message, $payload] = $generator->getExceptionPayload($exception);
 
-        $this->assertContains($msg, $message);
+        $this->assertStringContainsString($msg, $message);
 
         $this->assertArrayHasKey('body', $payload);
         $this->assertArrayHasKey('request', $payload);
         $this->assertArrayHasKey('environment', $payload);
         $this->assertArrayHasKey('framework', $payload);
-        $this->assertArrayHasKey('language_version', $payload);
         $this->assertArrayHasKey('server', $payload);
 
         $body = ['trace_chain' => $chain($exception)];
@@ -200,62 +182,18 @@ class GeneratorTest extends KernelTestCase
         $this->assertEquals($requestInfo, $payload['request']);
         $this->assertEquals(static::$kernel->getEnvironment(), $payload['environment']);
         $this->assertEquals(Kernel::VERSION, $payload['framework']);
-        $this->assertEquals(phpversion(), $payload['language_version']);
         $this->assertEquals($serverInfo, $payload['server']);
     }
 
-    /**
-     * Test strange exception.
-     *
-     * @dataProvider generatorStrangeData
-     *
-     * @param mixed $data
-     */
-    public function testStrangeException($data): void
-    {
-        $generator = $this->getGenerator();
-
-        [$message, $payload] = $generator->getExceptionPayload($data);
-
-        $this->assertEquals('Undefined error', $message);
-        $this->assertNotEmpty($payload['body']['trace']);
-    }
-
-    /**
-     * Data provider for testStrangeException.
-     *
-     * @return array
-     */
-    public function generatorStrangeData(): array
-    {
-        return [
-            ['zxcv'],
-            [1234],
-            [0.2345],
-            [null],
-            [(object) ['p' => 'a']],
-            [['s' => 'app', 'd' => 'web']],
-            [new ErrorItem()],
-        ];
-    }
-
-    /**
-     * Get container.
-     *
-     * @return ContainerInterface
-     */
-    private function getContainer(): ContainerInterface
+    protected static function getContainer(): ContainerInterface
     {
         return static::$container ?? static::$kernel->getContainer();
     }
 
-    /**
-     * Get generator.
-     *
-     * @return object
-     */
-    private function getGenerator()
+    private function getGenerator(): Generator
     {
-        return $this->getContainer()->get('test.' . Generator::class);
+        /** @var $generator Generator */
+        $generator = self::getContainer()->get('test.' . Generator::class);
+        return $generator;
     }
 }

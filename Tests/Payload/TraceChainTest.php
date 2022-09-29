@@ -5,16 +5,8 @@ namespace Rollbar\Symfony\RollbarBundle\Tests\Payload;
 use Rollbar\Symfony\RollbarBundle\Payload\TraceChain;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Class TraceChainTest
- *
- * @package Rollbar\Symfony\RollbarBundle\Tests\Payload
- */
 class TraceChainTest extends KernelTestCase
 {
-    /**
-     * Test invoke.
-     */
     public function testInvoke(): void
     {
         $previous = new \Exception('Exception', 1);

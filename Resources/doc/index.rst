@@ -1,9 +1,9 @@
-Rollbar for Symfony 3
+Rollbar for Symfony 5+
 =====================
 
 |codecov| |Build Status| |Software License|
 
-Rollbar full-stack error tracking for Symfony 3
+Rollbar full-stack error tracking for Symfony 5+
 
 Description
 -----------
@@ -11,7 +11,7 @@ Description
 Rollbar collects errors that happen in your application, notifies you,
 and analyzes them so you can debug and fix them.
 
-This plugin integrates Rollbar into your Symfony 3 installation.
+This plugin integrates Rollbar into your Symfony 5+ installation.
 
 Find out `how Rollbar can help you decrease development and maintenance
 costs`_.
@@ -28,33 +28,15 @@ Installation
 ------------
 
 1. Add ``Rollbar for Symfony`` with composer:
-   ``composer require rollbar/rollbar-php-symfony3-bundle``
-2. Register ``Rollbar\Symfony\RollbarBundle`` in
-   ``AppKernel::registerBundles()`` **after** registering the
+   ``composer require rollbar/rollbar-php-symfony-bundle``
+
+2. Register Bundel: Only if you do NOT use Symfony Flex
+   Register ``Rollbar\Symfony\RollbarBundle\RollbarBundle::class => ['all' => true],`` in
+   ``config/bundles.php`` **after** registering the
    ``MonologBundle``
-   (``new Symfony\Bundle\MonologBundle\MonologBundle()``).
+   (``Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],``).
 
-.. code:: php
-
-
-        public function registerBundles()
-        {
-            $bundles = [
-                // ...
-                new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-                // ...
-                new Symfony\Bundle\MonologBundle\MonologBundle(),
-                // ...
-                new \SymfonyRollbarBundle\SymfonyRollbarBundle(),
-                // ...
-            ];
-
-            return $bundles;
-        }
-        
-
-3. Configure Rollbar and Monolog in your ``app/config.yml`` or
-   ``app/config_*.yml``.
+3. Configure Rollbar and Monolog in your ``config/packages/[*]/rollbar.yml or monolog.yaml`.
 
 .. code:: yaml
 
@@ -76,7 +58,7 @@ Usage
 Exception reporting
 ~~~~~~~~~~~~~~~~~~~
 
-Symfony 3 exceptions will be reported to Rollbar automatically after you
+Symfony exceptions will be reported to Rollbar automatically after you
 install and configure the bundle.
 
 Manual reporting
@@ -113,9 +95,9 @@ LoggerInterface $logger) { $logger->error(‘Test info with person data’);
 .. _real companies improving their development workflow thanks to Rollbar: https://rollbar.com/customers/
 .. _symfony/monolog-bundle: https://github.com/symfony/monolog-bundle
 
-.. |codecov| image:: https://codecov.io/gh/rollbar/rollbar-php-symfony3-bundle/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/rollbar/rollbar-php-symfony3-bundle
-.. |Build Status| image:: https://travis-ci.org/rollbar/rollbar-php-symfony3-bundle.svg?branch=master
-   :target: https://travis-ci.org/rollbar/rollbar-php-symfony3-bundle
+.. |codecov| image:: https://codecov.io/gh/rollbar/rollbar-php-symfony-bundle/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/rollbar/rollbar-php-symfony-bundle
+.. |Build Status| image:: https://travis-ci.org/rollbar/rollbar-php-symfony-bundle.svg?branch=master
+   :target: https://travis-ci.org/rollbar/rollbar-php-symfony-bundle
 .. |Software License| image:: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
    :target: LICENSE
